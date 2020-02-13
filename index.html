@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" placeholder="plz" v-model.trim="plz"><span>{{ort}}</span>
+            <!--<p v-for="plz_ort in plz_orte">{{plz_ort.zip + plz_ort.town}}</p>-->
+            <ul v-show="plz_orte.length > 1">
+                <li v-for="entry in plz_orte" v-on:click="select_plz">{{entry.zip + " " + entry.town}}</li>
+            </ul>
+        <br>
+        <input type="text" placeholder="strasse" v-show="plz_valid">
+        <br>
+        <input type="text" placeholder="hausnummer" v-show="plz_valid">
+        <br>
+        <p>{{plz_valid}}</p>
+        <p v-bind="plz_valid"></p>
+    </div>
+</body>
+<script type="text/javascript" src="vue_checker.js"></script></html>
