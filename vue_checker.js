@@ -1,12 +1,5 @@
 var api = 'https://api.init7.net/';
 
-Vue.component('plz-result', {
-    props: ['entry'],
-    template: `
-        <li>{{entry.zip + " " entry.town}}<li>
-        `
-})
-
 var app = new Vue({
     el: '#app',
     data: {
@@ -14,70 +7,81 @@ var app = new Vue({
         strasse: '',
         house_nr: '',
         plz_valid: false,
+        strasse_valid: false,
         info: '',
         plz_orte: [],
         strassen: [],
-        test: 'test'
+        ort: ''
     },
+
     watch: {
         plz: function () {
-            if (this.plz.length > 1) {
-                this.getPlzCity();
+            if(this.plz.length > 4){
+                this.ort = "Bitte geben Sie ein gültige PLZ ein"
             }
+            else if (this.plz.length > 3){
+                this.getPlzCity()
+            }else if (this.plz.length > 1) {
+                this.plz_valid = false
+                this.ort = ''
+                this.getPlzCity()
+            }
+        },
+        strasse: function(){
+            if(this.strasse.length > 2 && this.plz.length == 4 && this.plz_orte.length > 0){
 
-
-            if (this.plz.length == 4) {
-                this.plz_valid = true;
-            } else {
-                this.plz_valid = false;
+                //prüft ob es resultate zum anzeigen gibt
+                if(this.strassen.length>0){
+                    console.log
+                    //prüft ob die eingegebene Strasse im Resultarray vorkommt
+                    var found = false
+                    for(var i = 0; i < this.strassen.length; i++) {
+                        if (this.strassen[i].street == this.strasse) {
+                            var found = true
+                            break;
+                        }
+                    }
+                    if(!found){
+                        this.strasse_valid = false;
+                    }
+                }
+                this.getStrasse()
             }
         }
     },
-    computed:{
-        ort: function(){
-            if(this.plz.length != 4){
-                return 'bitte geben sie eine PLZ ein'
-            }else if(this.plz.length == 4 && this.plz_orte.length==0){
-                return 'plz nicht bekannt'
-            }else{
-                return this.plz_orte[0].town
-            }
-        }
-    },
+
     methods: {
         getPlzCity: function () {
             var vm = this
             axios.get(api + 'post/zip/' + this.plz + '/')
                 .then(function (response) {
-                    console.log(vm.plz_orte)
                     vm.plz_orte = response.data
-                    console.log(vm.plz_orte)
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
         },
-        getStreet: function () {
-            if (this.plz_orte.length == 1) {
-                var vm = this
-                axios.get(api + 'post/streets/' + this.plz + '/' + this.strasse)
-                    .then(function (response) {
-                        console.log(vm.plz_orte)
-                        vm.plz_orte = response.data
-                        console.log(vm.plz_orte)
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-            }
+        getStrasse: function () {
+            var vm = this
+            axios.get(api + 'post/streets/' + this.plz + '/' + this.strasse)
+                .then(function (response) {
+                    vm.strassen = response.data
+                    //console.log(vm.strassen.__ob__.value[0].street)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
         },
         select_plz: function (event) {
+            this.plz_valid = true
             splitArray = event.target.innerText.split(" ")
-            console.log(splitArray[0])
             this.plz = splitArray[0]
-            //splitArray.shift()
-            //console.log(splitArray.join())
-            //this.ort = splitArray.join()
+            splitArray.shift()
+            this.ort = splitArray.join()
+        },
+        select_street: function(event){
+            this.strasse_valid = true
+            this.strasse = event.target.innerText
         }
-    }
+}
 })
