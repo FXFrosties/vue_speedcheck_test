@@ -137,6 +137,13 @@ var app = new Vue({
     },
     computed: {
         info: function(){
+            var messages = ''
+            
+            if (this.result != '' && this.result.messages.length > 0){
+                for(var i = 0; i < this.result.messages.length; i++){
+                    messages = messages + "<br>" + this.result.messages[i].code + ": " + this.result.messages[i].comment
+                }
+            }
             return("plz_valid: " + this.plz_valid + "<br>" +
                   "strasse_valid: " + this.strasse_valid + "<br>" +
                   "house_nr_valid: " + this.house_nr_valid + "<br>" +
@@ -151,7 +158,8 @@ var app = new Vue({
                   "result_is_vdsl: " + this.result.vdsl + "<br>" + 
                   "result_is_litexchange: " + this.result.litex + "<br>" + 
                   "result_is_vdsl_speed_up: " + this.result.vdsl_up + "<br>" + 
-                  "result_is_vdsl_speed_down: " + this.result.vdsl_down + "<br>"
+                  "result_is_vdsl_speed_down: " + this.result.vdsl_down + "<br>" + 
+                  "messages: " + messages 
                   )
         }
     }
