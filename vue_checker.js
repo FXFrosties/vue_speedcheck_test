@@ -52,7 +52,7 @@ var app = new Vue({
         },
         house_nr: function(){
             console.log("hello")
-            if(this.strassen.length == 1 && this.plz_orte.length == 1 && this.house_nr.length > 0){
+            if(this.strassen.length > 0 && this.plz_orte.length > 0 && this.house_nr.length > 0){
                 if(this.house_nrs.length > 0){
                     for(var i = 0; i < this.house_nrs.length; i++) {
                         if (this.house_nrs[i].house == this.house_nr) {
@@ -122,6 +122,7 @@ var app = new Vue({
         check: function(){
             this.loading = 'loading'
             var vm = this
+            console.log(api + 'check/address/' + this.plz + '/' + this.strasse + '/' + this.house_nr + '/')
             axios.get(api + 'check/address/' + this.plz + '/' + this.strasse + '/' + this.house_nr + '/')
                 .then(function (response) {
                     console.log(response.data)
@@ -136,7 +137,7 @@ var app = new Vue({
     },
     computed: {
         info: function(){
-            return(/*"plz_valid: " + this.plz_valid + "<br>" +
+            return("plz_valid: " + this.plz_valid + "<br>" +
                   "strasse_valid: " + this.strasse_valid + "<br>" +
                   "house_nr_valid: " + this.house_nr_valid + "<br>" +
                   "plz: " + this.plz + "<br>" +
@@ -145,7 +146,7 @@ var app = new Vue({
                   "house_nr: " + this.house_nr + "<br>" +
                   "plz_orte: " + this.plz_orte + "<br>" +
                   "strassen: " + this.strassen + "<br>" +
-                  "house_nrs: " + this.house_nrs + "<br>"+*/
+                  "house_nrs: " + this.house_nrs + "<br>"+
                   "result_is_fiber: " + this.result.fiber + "<br>" + 
                   "result_is_vdsl: " + this.result.vdsl + "<br>" + 
                   "result_is_litexchange: " + this.result.litex + "<br>" + 
