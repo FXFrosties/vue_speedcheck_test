@@ -19,15 +19,21 @@
 
         <!-- Strasse start -------------------------------------------------------------------------------------------------------------------------->
         <input type="text" placeholder="strasse" v-show="plz.length == 4 && plz_orte.length > 0" v-model="strasse">
-        <ul v-show="!strasse_valid && strasse.length > 2">
+        <ul v-show="!strasse_valid && strasse.length > 2 && plz.length == 4 && plz_orte.length > 0">
             <li v-for="strasse in strassen" v-on:click="select_street">{{strasse.street}}</li>
         </ul>
         <!-- Strasse ende -------------------------------------------------------------------------------------------------------------------------->
 
         <br>
-        <input type="text" placeholder="hausnummer" v-show="plz_orte.length == 1">
+        <input type="text" placeholder="hausnummer" v-show="strasse.length > 1 && plz.length == 4" v-model="house_nr">
+        <ul v-show="!house_nr_valid && house_nr.length > 0 && strasse.length > 1 && plz.length == 4">
+            <li v-for="house_nr in house_nrs" v-on:click="select_house_nr">{{house_nr.house}}</li>
+        </ul>
         <br>
-        <p>{{info}}</p>
+        <button v-on:click="check()">prüfen</button>
+        
+        
+        <p v-html="info"></p>
     </div>
 </body>
 <script type="text/javascript" src="vue_checker.js"></script></html>
