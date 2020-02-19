@@ -13,7 +13,8 @@ var app = new Vue({
         strassen: [],
         house_nrs: [],
         ort: '',
-        result: ''
+        result: '',
+        loading: ''
     },
 
     watch: {
@@ -119,21 +120,23 @@ var app = new Vue({
             this.house_nr = event.target.innerText
         },
         check: function(){
-            console.log("clicked")
+            this.loading = 'loading'
             var vm = this
             axios.get(api + 'check/address/' + this.plz + '/' + this.strasse + '/' + this.house_nr + '/')
                 .then(function (response) {
                     console.log(response.data)
                     vm.result = response.data
+                    vm.loading = ''
                 })
                 .catch(function (error) {
                     console.log(error)
+                    vm.loading = 'fehler beim laden'
                 })
         }
     },
     computed: {
         info: function(){
-            return("plz_valid: " + this.plz_valid + "<br>" +
+            return(/*"plz_valid: " + this.plz_valid + "<br>" +
                   "strasse_valid: " + this.strasse_valid + "<br>" +
                   "house_nr_valid: " + this.house_nr_valid + "<br>" +
                   "plz: " + this.plz + "<br>" +
@@ -142,7 +145,7 @@ var app = new Vue({
                   "house_nr: " + this.house_nr + "<br>" +
                   "plz_orte: " + this.plz_orte + "<br>" +
                   "strassen: " + this.strassen + "<br>" +
-                  "house_nrs: " + this.house_nrs + "<br>"+
+                  "house_nrs: " + this.house_nrs + "<br>"+*/
                   "result_is_fiber: " + this.result.fiber + "<br>" + 
                   "result_is_vdsl: " + this.result.vdsl + "<br>" + 
                   "result_is_litexchange: " + this.result.litex + "<br>" + 

@@ -10,7 +10,7 @@
     <div id="app">
 
        <!-- PLZ start ------------------------------------------------------------------------------------------------------------------------------->
-        <input type="text" placeholder="plz" v-model.trim="plz"><span>{{ort}}</span>
+        <input type="text" placeholder="plz" v-model.trim="plz"><span v-show="plz.length == 4 && plz_orte.length > 0">{{ort}}</span>
         <ul v-show="!plz_valid && plz.length > 1">
             <li v-for="plz in plz_orte" v-on:click="select_plz">{{plz.zip + " " + plz.town}}</li>
         </ul>
@@ -31,7 +31,7 @@
         </ul>
         <br>
         <button v-on:click="check()">prüfen</button>
-        
+        <p>{{loading}}</p>
         
         <p v-html="info"></p>
     </div>
