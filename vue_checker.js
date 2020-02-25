@@ -27,7 +27,7 @@ var app = new Vue({
             }else if (this.plz.length > 1) {
                 this.plz_valid = false
                 this.ort = ''
-                this.getPlzCity()
+                this.getPlzCity(), 5000
             }
         },
         strasse: function(){
@@ -72,7 +72,8 @@ var app = new Vue({
     },
 
     methods: {
-        getPlzCity: function () {
+        getPlzCity: _.debounce(function() {
+            console.log("plz: " + this.plz)
             var vm = this
             axios.get(api + 'post/zip/' + this.plz + '/')
                 .then(function (response) {
@@ -81,8 +82,9 @@ var app = new Vue({
                 .catch(function (error) {
                     console.log(error)
                 })
-        },
-        getStrasse: function () {
+        },500),
+        getStrasse: _.debounce(function () {
+            console.log('called')
             var vm = this
             axios.get(api + 'post/streets/' + this.plz + '/' + this.strasse)
                 .then(function (response) {
@@ -92,8 +94,9 @@ var app = new Vue({
                 .catch(function (error) {
                     console.log(error)
                 })
-        },
-        getHouseNr: function(){
+        }, 500),
+        getHouseNr: _.debounce(function(){
+            console.log('called')
             var vm = this
             axios.get(api + 'post/houses/' + this.plz + '/' + this.strasse + '/' + this.house_nr)
                 .then(function (response) {
@@ -103,7 +106,7 @@ var app = new Vue({
                 .catch(function (error) {
                     console.log(error)
                 })
-        },
+        },500),
         select_plz: function (event) {
             this.plz_valid = true
             var splitArray = event.target.innerText.split(" ")
